@@ -1,4 +1,5 @@
 ﻿
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace MiniZooApi.Controllers
@@ -24,6 +25,13 @@ namespace MiniZooApi.Controllers
                 return NotFound($"Animal with index {index} does not exist.");
             }
             return Ok(animalList[index]);                
+        }
+        [HttpPost]
+        public IActionResult PostAnimal([FromBody] string animalName)
+        {
+            animalList.Add(animalName);
+            return CreatedAtAction(nameof(Animal), ************* );
+
         }
     }
 
