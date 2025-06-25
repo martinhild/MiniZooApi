@@ -1,0 +1,25 @@
+# Build folders
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+
+# User-specific files
+*.user
+*.suo
+
+# Rider IDE
+.idea/
+
+# Dotnet packages
+*.nupkg
+*.snupkg
+.nuget/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

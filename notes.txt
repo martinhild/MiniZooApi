@@ -1,0 +1,3 @@
+
+- A Web API is just:
+	A program that waits for HTTP requests  and responds with data (often JSON)
