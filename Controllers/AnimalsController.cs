@@ -1,24 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 
 namespace MiniZooApi.Controllers
 {
     [ApiController]
-    [Route("Api/[controller]")]
+    [Route("api/[controller]")]
     public class AnimalsController : ControllerBase
     {
         private static List<string> animalList = ["Ape", "Bear", "Cheetah", "Dolphin"];
 
         [HttpGet]
-        public List<string> Animals()
+        public IActionResult Animals()
         {
-            return animalList;            
+            return Ok(animalList);
         }
 
 
-        [HttpGet("{id}")]       
-        public string Animal(int id)
+        [HttpGet("{index}")]       
+        public IActionResult Animal(int index)
         {
-            return animalList[id];                
+            if (index < 0 || index >= animalList.Count)
+            {
+                return NotFound($"Animal with index {index} does not exist.");
+            }
+            return Ok(animalList[index]);                
         }
     }
 
