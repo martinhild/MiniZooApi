@@ -1,42 +1,79 @@
 ﻿
-
 using Microsoft.AspNetCore.Mvc;
+using MiniZooApi.Dtos;
+using MiniZooApi.Models;
 
-namespace MiniZooApi.Controllers
+namespace MiniZooApi.Controllers;
+
+
+[ApiController]
+[Route("api/[controller]")]
+public class AnimalsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AnimalsController : ControllerBase
+    private static int uniqueId = 0;
+    private static List<Animal> animalList = new List<Animal>
     {
-        private static List<string> animalList = ["Ape", "Bear", "Cheetah", "Dolphin"];
+        new Animal (GiveNewId(), "Ape"),
+        new Animal (GiveNewId(), "Bear"),
+        new Animal (GiveNewId(), "Cheetah")
+    };
 
-        [HttpGet]
-        public IActionResult Animals()
-        {
-            return Ok(animalList);
-        }
-
-
-        [HttpGet("{index}")]       
-        public IActionResult Animal(int index)
-        {
-            if (index < 0 || index >= animalList.Count)
-            {
-                return NotFound($"Animal with index {index} does not exist.");
-            }
-            return Ok(animalList[index]);                
-        }
-        [HttpPost]
-        public IActionResult PostAnimal([FromBody] string animalName)
-        {
-            animalList.Add(animalName);
-            return CreatedAtAction(nameof(Animal), ************* );
-
-        }
+    private static int GiveNewId()
+    {
+        return ++uniqueId;
     }
 
+[HttpGet]
+    public IActionResult Animals()
+    {
+        return Ok(animalList);
+    }
 
+    [HttpGet("{id}")]
+    public IActionResult AnimalById(int id)
+    {
+        var animal = animalList.FirstOrDefault(a => a.Id == id);
+        if (animal == null)
+        {
+            return NotFound();
+        }
+        return Ok(animal);
+    }
 
+    [HttpPost]
+    public IActionResult CreateAnimal([FromBody] CreateAnimalDto dto)
+    {
+        if (dto == null || string.IsNullOrWhiteSpace(dto.PostAnimal))
+        {
+            return BadRequest("Animal name is required.");
+        }
 
+        var newAnimal = new Animal(GiveNewId(), dto.PostAnimal);
+        animalList.Add(newAnimal);
+        return CreatedAtAction(nameof(AnimalById), new { id = newAnimal.Id }, newAnimal);
+    }
 
+    [HttpPut("{id}")]
+    public IActionResult UpdateAnimal(int id, [FromBody] UpdateAnimalDto dto)
+    {
+        var animal = animalList.FirstOrDefault(a => a.Id == id);
+        if (animal == null)
+        {
+            return NotFound();
+        }
+        animal.Name = dto.NewName;
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteAnimal(int id)
+    {
+        var animal = animalList.FirstOrDefault(a => a.Id == id);
+        if (animal == null)
+        {
+            return NotFound();
+        }
+        animalList.Remove(animal);
+        return NoContent();
+    }
 }
