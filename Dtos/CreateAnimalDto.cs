@@ -1,7 +1,7 @@
 ﻿namespace MiniZooApi.Dtos;
-using MiniZooApi.Models;
+
 
 public class CreateAnimalDto
 {
-    public string PostAnimal { get; set; }
+    public string Name { get; set; } = string.Empty;
 }
