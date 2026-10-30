@@ -35,7 +35,7 @@ public class Program
             });
         });
 
-        // ✅ DbContext-Registrierung (wichtig für EF Core)
+        // DbContext-Registrierung
         builder.Services.AddDbContext<ZooDbContext>(options =>
             options.UseSqlite("Data Source=MiniZoo.db"));
 
